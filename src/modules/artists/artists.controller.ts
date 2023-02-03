@@ -28,7 +28,7 @@ export class ArtistController {
     return artist;
   }
 
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   @Get()
   async findAll() {
     const artists = await this.artistService.findAll();
