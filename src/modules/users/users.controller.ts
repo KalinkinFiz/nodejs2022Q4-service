@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   HttpStatus,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 
 import { UserService } from './users.service';
@@ -42,7 +43,7 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const user = await this.userService.findOne(id);
 
     return user;
@@ -51,7 +52,10 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     const user = await this.userService.update(id, updateUserDto);
 
     return user;
@@ -59,8 +63,9 @@ export class UserController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const user = await this.userService.remove(id);
+
     return user;
   }
 }
