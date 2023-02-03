@@ -10,7 +10,7 @@ import { InMemoryDb } from '../../db/in-memory.db';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-import { UserEntity } from './users.entity';
+import { UserEntity } from './user.entity';
 
 @Injectable()
 export class UserService {
