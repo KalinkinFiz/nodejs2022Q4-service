@@ -1,10 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
-import 'dotenv/config';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { parse } from 'yaml';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
 
 import { AppModule } from './app.module';
 
@@ -28,7 +31,10 @@ async function bootstrap() {
     );
   } catch (error) {
     Logger.error(`❌  Error starting server, ${error}`, '', 'Bootstrap', false);
-    process.exit(1);
+    throw new InternalServerErrorException(error);
   }
 }
-bootstrap();
+
+bootstrap().catch(() => {
+  process.exit(1);
+});
