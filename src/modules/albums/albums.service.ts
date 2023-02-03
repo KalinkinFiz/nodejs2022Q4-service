@@ -35,13 +35,13 @@ export class AlbumService {
 
     if (albumId === -1) throw new NotFoundException('Album not found');
 
-    const updatedAlbum = Object.assign(this.db.albums[albumId], {
+    const album = Object.assign(this.db.albums[albumId], {
       ...updateAlbumDto,
     });
 
-    this.db.albums[albumId] = updatedAlbum;
+    this.db.albums[albumId] = album;
 
-    return updatedAlbum;
+    return album;
   }
 
   async remove(id: string) {
