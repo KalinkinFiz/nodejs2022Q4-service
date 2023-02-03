@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserModel } from '../modules/users/user.model';
-import { AlbumModel } from '../modules/albums/album.model';
+import { UserModel } from './models/user.model';
+import { AlbumModel } from './models/album.model';
+import { ArtistModel } from './models/artist.model';
 
 @Injectable()
 export class InMemoryDb {
   users: UserModel[] = [];
   albums: AlbumModel[] = [];
+  artists: ArtistModel[] = [];
 }
