@@ -51,14 +51,16 @@ export class UserService {
 
     const { oldPassword, newPassword } = updateUserDto;
 
-    if (oldPassword !== this.db.users[userId].password)
+    const user = await this.findOne(id);
+
+    if (oldPassword !== user.password)
       throw new ForbiddenException('Incorrect old password');
 
-    this.db.users[userId].password = newPassword;
-    ++this.db.users[userId].version;
-    this.db.users[userId].updatedAt = Date.now();
+    user.password = newPassword;
+    ++user.version;
+    user.updatedAt = Date.now();
 
-    return this.db.users[userId];
+    return user;
   }
 
   async remove(id: string) {
@@ -66,9 +68,6 @@ export class UserService {
 
     if (userId === -1) throw new NotFoundException('User not found');
 
-    this.db.users = [
-      ...this.db.users.slice(0, userId),
-      ...this.db.users.slice(userId + 1),
-    ];
+    this.db.users.splice(userId, 1);
   }
 }
