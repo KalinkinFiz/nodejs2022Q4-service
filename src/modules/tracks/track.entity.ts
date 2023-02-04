@@ -1,4 +1,4 @@
-export class ArtistEntity {
+export class TrackEntity {
   id!: string;
 
   name: string;
@@ -9,7 +9,7 @@ export class ArtistEntity {
 
   duration: number;
 
-  constructor(partial: Partial<ArtistEntity>) {
+  constructor(partial: Partial<TrackEntity>) {
     Object.assign(this, partial);
   }
 }
