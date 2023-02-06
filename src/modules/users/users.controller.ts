@@ -43,8 +43,8 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const user = await this.userService.findOne(id);
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const user = this.userService.findOne(id);
 
     return user;
   }

@@ -9,6 +9,7 @@ import {
   Put,
   HttpCode,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 
 import { TrackService } from './tracks.service';
@@ -23,7 +24,7 @@ export class TrackController {
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async create(@Body() createTrackDto: CreateTrackDto) {
-    const track = await this.trackService.create(createTrackDto);
+    const track = this.trackService.create(createTrackDto);
 
     return track;
   }
@@ -31,15 +32,17 @@ export class TrackController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async findAll() {
-    const tracks = await this.trackService.findAll();
+    const tracks = this.trackService.findAll();
 
     return tracks;
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = await this.trackService.findOne(id);
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const track = this.trackService.findOne(id);
+
+    if (!track) throw new NotFoundException('Track not found');
 
     return track;
   }
@@ -50,7 +53,7 @@ export class TrackController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    const track = await this.trackService.update(id, updateTrackDto);
+    const track = this.trackService.update(id, updateTrackDto);
 
     return track;
   }
@@ -58,7 +61,7 @@ export class TrackController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = await this.trackService.remove(id);
+    const track = this.trackService.remove(id);
 
     return track;
   }
