@@ -1,72 +1,93 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 
 import { InMemoryDb } from '../../db/in-memory.db';
 
+import { AlbumService } from '../albums/albums.service';
+import { ArtistService } from '../artists/artists.service';
+import { TrackService } from '../tracks/tracks.service';
+
 @Injectable()
 export class FavoritesService {
-  constructor(private db: InMemoryDb) {}
+  constructor(
+    private db: InMemoryDb,
+    @Inject(forwardRef(() => ArtistService))
+    private readonly artistService: ArtistService,
+    @Inject(forwardRef(() => AlbumService))
+    private readonly albumService: AlbumService,
+    @Inject(forwardRef(() => TrackService))
+    private readonly trackService: TrackService,
+  ) {}
 
-  async findAll() {
-    return this.db.favourites;
+  findAll() {
+    return this.db.favorites;
   }
 
-  async addArtist(id: string) {
-    const artist = this.db.artists.find((artist) => artist.id === id);
+  addArtist(id: string) {
+    const artist = this.artistService.findOne(id);
 
-    if (!artist) throw new NotFoundException('Artist not found');
+    if (!artist) throw new UnprocessableEntityException('Artist not found');
 
-    this.db.favourites.artists.push(artist);
+    this.db.favorites.artists.push(artist);
 
     return artist;
   }
 
-  async addAlbum(id: string) {
-    const album = this.db.albums.find((album) => album.id === id);
+  addAlbum(id: string) {
+    const album = this.albumService.findOne(id);
 
-    if (!album) throw new NotFoundException('Album not found');
+    if (!album) throw new UnprocessableEntityException('Album not found');
 
-    this.db.favourites.albums.push(album);
+    this.db.favorites.albums.push(album);
 
     return album;
   }
 
-  async addTrack(id: string) {
-    const track = this.db.tracks.find((track) => track.id === id);
+  addTrack(id: string) {
+    const track = this.trackService.findOne(id);
 
-    if (!track) throw new NotFoundException('Track not found');
+    if (!track) throw new UnprocessableEntityException('Track not found');
 
-    this.db.favourites.tracks.push(track);
+    this.db.favorites.tracks.push(track);
 
     return track;
   }
 
-  async removeArtist(id: string) {
-    const artistId = this.db.favourites.artists.findIndex(
+  removeArtist(id: string, skipError = false) {
+    const artistId = this.db.favorites.artists.findIndex(
       (artist) => artist.id === id,
     );
 
-    if (artistId === -1) throw new NotFoundException('Artist not found');
+    if (artistId === -1 && !skipError)
+      throw new NotFoundException('Artist not found');
 
-    this.db.favourites.artists.splice(artistId, 1);
+    this.db.favorites.artists.splice(artistId, 1);
   }
 
-  async removeAlbum(id: string) {
-    const albumId = this.db.favourites.albums.findIndex(
+  removeAlbum(id: string, skipError = false) {
+    const albumId = this.db.favorites.albums.findIndex(
       (album) => album.id === id,
     );
 
-    if (albumId === -1) throw new NotFoundException('Album not found');
+    if (albumId === -1 && !skipError)
+      throw new NotFoundException('Album not found');
 
-    this.db.favourites.albums.splice(albumId, 1);
+    this.db.favorites.albums.splice(albumId, 1);
   }
 
-  async removeTrack(id: string) {
-    const trackId = this.db.favourites.tracks.findIndex(
+  removeTrack(id: string, skipError = false) {
+    const trackId = this.db.favorites.tracks.findIndex(
       (track) => track.id === id,
     );
 
-    if (trackId === -1) throw new NotFoundException('Track not found');
+    if (trackId === -1 && !skipError)
+      throw new NotFoundException('Track not found');
 
-    this.db.favourites.tracks.splice(trackId, 1);
+    this.db.favorites.tracks.splice(trackId, 1);
   }
 }

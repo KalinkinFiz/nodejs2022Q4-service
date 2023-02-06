@@ -36,7 +36,7 @@ export class UserService {
     return this.db.users;
   }
 
-  async findOne(id: string) {
+  findOne(id: string) {
     const user = this.db.users.find((user) => user.id === id);
 
     if (!user) throw new NotFoundException('User not found');
