@@ -12,7 +12,7 @@ export class InMemoryDb {
   albums: AlbumModel[] = [];
   artists: ArtistModel[] = [];
   tracks: TrackModel[] = [];
-  favourites: FavoritesModel = {
+  favorites: FavoritesModel = {
     artists: [],
     tracks: [],
     albums: [],

@@ -1,5 +1,5 @@
 export class AlbumEntity {
-  id!: string;
+  id: string;
 
   name: string;
 

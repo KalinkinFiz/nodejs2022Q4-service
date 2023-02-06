@@ -1,5 +1,5 @@
 export class ArtistEntity {
-  id!: string;
+  id: string;
 
   name: string;
 

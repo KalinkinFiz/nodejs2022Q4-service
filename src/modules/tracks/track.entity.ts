@@ -1,5 +1,5 @@
 export class TrackEntity {
-  id!: string;
+  id: string;
 
   name: string;
 
