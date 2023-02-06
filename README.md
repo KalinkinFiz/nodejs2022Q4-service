@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/KalinkinFiz/nodejs2022Q4-service/tree/rest
 ```
 
 ## Installing NPM modules
@@ -16,6 +16,10 @@ git clone {repository URL}
 ```
 npm install
 ```
+
+## ❗❗❗Rename `.env.example` to `.env`❗❗❗
+
+---
 
 ## Running application
 
