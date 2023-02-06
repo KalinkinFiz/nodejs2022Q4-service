@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone https://github.com/KalinkinFiz/nodejs2022Q4-service/tree/rest
+git clone -b rest https://github.com/KalinkinFiz/nodejs2022Q4-service.git
 ```
 
 ## Installing NPM modules
