@@ -25,7 +25,9 @@ export class FavoritesService {
   ) {}
 
   findAll() {
-    return this.db.favorites;
+    const favorites = this.db.favorites;
+
+    return favorites;
   }
 
   addArtist(id: string) {
@@ -34,8 +36,6 @@ export class FavoritesService {
     if (!artist) throw new UnprocessableEntityException('Artist not found');
 
     this.db.favorites.artists.push(artist);
-
-    return artist;
   }
 
   addAlbum(id: string) {
@@ -44,8 +44,6 @@ export class FavoritesService {
     if (!album) throw new UnprocessableEntityException('Album not found');
 
     this.db.favorites.albums.push(album);
-
-    return album;
   }
 
   addTrack(id: string) {
@@ -54,8 +52,6 @@ export class FavoritesService {
     if (!track) throw new UnprocessableEntityException('Track not found');
 
     this.db.favorites.tracks.push(track);
-
-    return track;
   }
 
   removeArtist(id: string, skipError = false) {
