@@ -19,7 +19,7 @@ services:
 
   postgres:
     container_name: postgres_container
-    build: ./database/
+    build: ./src/db/
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     command: postgres -c logging_collector=on
