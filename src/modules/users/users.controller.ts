@@ -15,6 +15,8 @@ import {
 
 import { UserService } from './users.service';
 
+import { UserEntity } from './user.entity';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -25,28 +27,24 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.userService.create(createUserDto);
-
-    return user;
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    return await this.userService.create(createUserDto);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
   @Get()
-  async findAll() {
-    const users = await this.userService.findAll();
-
-    return users;
+  async findAll(): Promise<UserEntity[]> {
+    return await this.userService.findAll();
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const user = this.userService.findOne(id);
-
-    return user;
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<UserEntity> {
+    return await this.userService.findOne(id);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -55,17 +53,15 @@ export class UserController {
   async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
-    const user = await this.userService.update(id, updateUserDto);
-
-    return user;
+  ): Promise<UserEntity> {
+    return await this.userService.update(id, updateUserDto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const user = await this.userService.remove(id);
-
-    return user;
+  async remove(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
+    await this.userService.remove(id);
   }
 }
