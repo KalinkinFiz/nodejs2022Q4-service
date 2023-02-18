@@ -13,9 +13,19 @@ import { AppModule } from './app.module';
 
 import { PORT } from './environments';
 
+import { AppDataSource } from './config.orm';
+
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
+
+    AppDataSource.initialize()
+      .then(() => {
+        Logger.log(`🌨️  Database connected`, 'TypeORM');
+      })
+      .catch(() => {
+        Logger.error(`❌  Database connect error`, '', 'TypeORM');
+      });
 
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
@@ -35,6 +45,7 @@ async function bootstrap() {
   }
 }
 
-bootstrap().catch(() => {
-  process.exit(1);
+bootstrap().catch((err) => {
+  Logger.error(`❌  Error starting server, ${err}`, '', 'Bootstrap', false);
+  throw err;
 });
