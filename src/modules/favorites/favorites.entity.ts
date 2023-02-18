@@ -1,15 +1,16 @@
-import { ArtistEntity } from '../artists/artist.entity';
-import { AlbumEntity } from '../albums/album.entity';
-import { TrackEntity } from '../tracks/track.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-export class FavoriteEntity {
-  artists: ArtistEntity[];
+@Entity('favourites')
+export class FavoritesEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  albums: AlbumEntity[];
+  @Column('simple-array')
+  albumsIds: string[];
 
-  tracks: TrackEntity[];
+  @Column('simple-array')
+  artistsIds: string[];
 
-  constructor(partial: Partial<FavoriteEntity>) {
-    Object.assign(this, partial);
-  }
+  @Column('simple-array')
+  tracksIds: string[];
 }
