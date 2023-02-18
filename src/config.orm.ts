@@ -1,4 +1,5 @@
-import { DataSourceOptions } from 'typeorm';
+import { DataSource } from 'typeorm';
+
 import {
   POSTGRES_HOST,
   POSTGRES_PORT,
@@ -7,7 +8,13 @@ import {
   POSTGRES_DB,
 } from './environments';
 
-export const ormConfig = {
+import { UserEntity } from './modules/users/user.entity';
+import { AlbumEntity } from './modules/albums/album.entity';
+import { ArtistEntity } from './modules/artists/artist.entity';
+import { TrackEntity } from './modules/tracks/track.entity';
+import { FavoritesEntity } from './modules/favorites/favorites.entity';
+
+export const AppDataSource = new DataSource({
   type: 'postgres',
   host: POSTGRES_HOST,
   port: Number(POSTGRES_PORT),
@@ -16,9 +23,15 @@ export const ormConfig = {
   database: POSTGRES_DB,
   synchronize: false,
   logging: false,
-  entities: [],
+  entities: [
+    UserEntity,
+    AlbumEntity,
+    ArtistEntity,
+    TrackEntity,
+    FavoritesEntity,
+  ],
   subscribers: [],
   migrationsRun: true,
   migrationsTableName: 'migrations',
-  migrations: [],
-} as DataSourceOptions;
+  migrations: ['dist/db/migrations/*{.ts,.js}'],
+});
