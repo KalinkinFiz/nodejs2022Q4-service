@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone -b rest https://github.com/KalinkinFiz/nodejs2022Q4-service.git
+git clone -b postgres-docker https://github.com/KalinkinFiz/nodejs2022Q4-service.git
 ```
 
 ## Installing NPM modules
@@ -21,15 +21,46 @@ npm install
 
 ---
 
-## Running application
+## Running the app
 
-```
-npm start
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
 ```
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Or Running via docker
+
+Run in terminal:
+
+```
+ docker-compose up
+```
+
+If you want to stop, press the keyboard shortcut first **Ctrl+C**, then enter in the terminal:
+
+```
+ docker-compose down
+```
+
+Rebuild images & start containers:
+
+```
+ docker compose up --build
+```
+
+Сonnected services:
+
+- Node
+- PostgreSQL
+- pgAdmin (http://localhost:5050/)
+
 
 ## Testing
 
