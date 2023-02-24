@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import {
   ForbiddenException,
   Injectable,
@@ -11,6 +12,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 import { UserEntity } from './user.entity';
 
+import { CRYPT_SALT } from '../../environments';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -19,9 +22,11 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const createUser = new UserEntity({
-      ...createUserDto,
-    });
+    const { password } = createUserDto;
+
+    createUserDto.password = await bcrypt.hash(password, CRYPT_SALT);
+
+    const createUser = new UserEntity(createUserDto);
 
     const user = this.userRepository.create(createUser);
 

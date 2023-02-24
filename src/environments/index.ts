@@ -8,10 +8,15 @@ dotenv.config({
 // application
 const PORT: number = +process.env.PORT || 4000;
 
+const CRYPT_SALT = process.env.CRYPT_SALT || 10;
+
 // JWT
 const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY || 'secret123123';
 const JWT_SECRET_REFRESH_KEY: string =
   process.env.JWT_SECRET_REFRESH_KEY || 'secret123123';
+const TOKEN_EXPIRE_TIME: string = process.env.TOKEN_EXPIRE_TIME || '1h';
+const TOKEN_REFRESH_EXPIRE_TIME: string =
+  process.env.TOKEN_REFRESH_EXPIRE_TIME || '24h';
 
 // database
 const POSTGRES_HOST: string = process.env.POSTGRES_HOST || 'postgres';
@@ -22,8 +27,11 @@ const POSTGRES_DB = process.env.POSTGRES_DB || 'postgres';
 
 export {
   PORT,
+  CRYPT_SALT,
   JWT_SECRET_KEY,
   JWT_SECRET_REFRESH_KEY,
+  TOKEN_EXPIRE_TIME,
+  TOKEN_REFRESH_EXPIRE_TIME,
   POSTGRES_HOST,
   POSTGRES_PORT,
   POSTGRES_USER,
