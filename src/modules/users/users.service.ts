@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import {
   ForbiddenException,
   Injectable,
@@ -54,10 +54,10 @@ export class UserService {
 
     const { oldPassword, newPassword } = updateUserDto;
 
-    if (oldPassword !== user.password)
-      throw new ForbiddenException('Incorrect old password');
+    const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordMatch) throw new ForbiddenException('Incorrect password');
 
-    user.password = newPassword;
+    user.password = await bcrypt.hash(newPassword, CRYPT_SALT);
 
     return await this.userRepository.save(user);
   }
