@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 
 import { ArtistService } from './artists.service';
+import { ArtistEntity } from './artist.entity';
 
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -23,46 +24,44 @@ export class ArtistController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto) {
-    const artist = this.artistService.create(createArtistDto);
-
-    return artist;
+  async create(
+    @Body() createArtistDto: CreateArtistDto,
+  ): Promise<ArtistEntity> {
+    return await this.artistService.create(createArtistDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  findAll() {
-    const artists = this.artistService.findAll();
-
-    return artists;
+  async findAll(): Promise<ArtistEntity[]> {
+    return await this.artistService.findAll();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const artist = this.artistService.findOne(id);
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<ArtistEntity> {
+    const artist = await this.artistService.findOne(id);
 
-    if (!artist) throw new NotFoundException('Track not found');
+    if (!artist) throw new NotFoundException('Artist not found');
 
     return artist;
   }
 
   @HttpCode(HttpStatus.OK)
   @Put(':id')
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
-  ) {
-    const artist = this.artistService.update(id, updateArtistDto);
-
-    return artist;
+  ): Promise<ArtistEntity> {
+    return await this.artistService.update(id, updateArtistDto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const artist = this.artistService.remove(id);
-
-    return artist;
+  async remove(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
+    await this.artistService.remove(id);
   }
 }

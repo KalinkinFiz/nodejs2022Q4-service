@@ -1,66 +1,50 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-
-import { InMemoryDb } from '../../db/in-memory.db';
-import { FavoritesService } from '../favorites/favorites.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 
+import { TrackEntity } from './track.entity';
+
 @Injectable()
 export class TrackService {
   constructor(
-    private db: InMemoryDb,
-    @Inject(forwardRef(() => FavoritesService))
-    private readonly favoritesService: FavoritesService,
+    @InjectRepository(TrackEntity)
+    private readonly trackRepository: Repository<TrackEntity>,
   ) {}
 
-  create(createTrackDto: CreateTrackDto) {
-    const track = { ...createTrackDto, id: uuidv4() };
+  async create(createTrackDto: CreateTrackDto) {
+    const track = this.trackRepository.create(createTrackDto);
 
-    this.db.tracks.push(track);
-
-    return track;
+    return await this.trackRepository.save(track);
   }
 
-  findAll() {
-    return this.db.tracks;
+  async findAll() {
+    return await this.trackRepository.find();
   }
 
-  findOne(id: string) {
-    const track = this.db.tracks.find((track) => track.id === id);
+  async findOne(id: string) {
+    const track = await this.trackRepository.findOne({ where: { id } });
 
     if (!track) return null;
 
     return track;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    const trackId = this.db.tracks.findIndex((track) => track.id === id);
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    const track = await this.findOne(id);
 
-    if (trackId === -1) throw new NotFoundException('Track not found');
+    if (!track) throw new NotFoundException('Track not found');
 
-    const updatedTrack = Object.assign(this.db.tracks[trackId], {
-      ...updateTrackDto,
-    });
+    const updatedTrack = Object.assign(track, updateTrackDto);
 
-    this.db.tracks[trackId] = updatedTrack;
-
-    return updatedTrack;
+    return await this.trackRepository.save(updatedTrack);
   }
 
-  remove(id: string) {
-    const trackId = this.db.tracks.findIndex((track) => track.id === id);
+  async remove(id: string) {
+    const track = await this.trackRepository.delete(id);
 
-    if (trackId === -1) throw new NotFoundException('Track not found');
-
-    this.db.tracks.splice(trackId, 1);
-
-    this.favoritesService.removeTrack(id, true);
+    if (track.affected === 0) throw new NotFoundException('Track not found');
   }
 }

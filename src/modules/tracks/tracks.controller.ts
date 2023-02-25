@@ -14,6 +14,8 @@ import {
 
 import { TrackService } from './tracks.service';
 
+import { TrackEntity } from './track.entity';
+
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 
@@ -23,24 +25,22 @@ export class TrackController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  async create(@Body() createTrackDto: CreateTrackDto) {
-    const track = this.trackService.create(createTrackDto);
-
-    return track;
+  async create(@Body() createTrackDto: CreateTrackDto): Promise<TrackEntity> {
+    return await this.trackService.create(createTrackDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async findAll() {
-    const tracks = this.trackService.findAll();
-
-    return tracks;
+  async findAll(): Promise<TrackEntity[]> {
+    return await this.trackService.findAll();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.trackService.findOne(id);
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<TrackEntity> {
+    const track = await this.trackService.findOne(id);
 
     if (!track) throw new NotFoundException('Track not found');
 
@@ -52,17 +52,15 @@ export class TrackController {
   async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
-  ) {
-    const track = this.trackService.update(id, updateTrackDto);
-
-    return track;
+  ): Promise<TrackEntity> {
+    return await this.trackService.update(id, updateTrackDto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.trackService.remove(id);
-
-    return track;
+  async remove(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
+    await this.trackService.remove(id);
   }
 }

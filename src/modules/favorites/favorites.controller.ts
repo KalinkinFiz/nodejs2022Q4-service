@@ -17,57 +17,51 @@ export class FavoritesController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  findAll() {
-    const favorites = this.favoritesService.findAll();
-
-    return favorites;
+  async findAll() {
+    return await this.favoritesService.findAll();
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post('track/:id')
-  addTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.favoritesService.addTrack(id);
-
-    return track;
+  async addTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return await this.favoritesService.addTrack(id);
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post('artist/:id')
-  addArtist(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const artist = this.favoritesService.addArtist(id);
-
-    return artist;
+  async addArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return await this.favoritesService.addArtist(id);
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post('album/:id')
-  addAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const album = this.favoritesService.addAlbum(id);
-
-    return album;
+  async addAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return await this.favoritesService.addAlbum(id);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('artist/:id')
-  removeArtist(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const artist = this.favoritesService.removeArtist(id);
-
-    return artist;
+  async removeArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    await this.favoritesService.removeArtist(id);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('album/:id')
-  removeAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const album = this.favoritesService.removeAlbum(id);
-
-    return album;
+  async removeAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    await this.favoritesService.removeAlbum(id);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('track/:id')
-  removeTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.favoritesService.removeTrack(id);
-
-    return track;
+  async removeTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    await this.favoritesService.removeTrack(id);
   }
 }

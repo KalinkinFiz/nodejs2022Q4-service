@@ -14,6 +14,8 @@ import {
 
 import { AlbumService } from './albums.service';
 
+import { AlbumEntity } from './album.entity';
+
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 
@@ -23,46 +25,42 @@ export class AlbumController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  create(@Body() createAlbumDto: CreateAlbumDto) {
-    const album = this.albumService.create(createAlbumDto);
-
-    return album;
+  async create(@Body() createAlbumDto: CreateAlbumDto): Promise<AlbumEntity> {
+    return await this.albumService.create(createAlbumDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  findAll() {
-    const albums = this.albumService.findAll();
-
-    return albums;
+  async findAll(): Promise<AlbumEntity[]> {
+    return await this.albumService.findAll();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const album = this.albumService.findOne(id);
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<AlbumEntity> {
+    const album = await this.albumService.findOne(id);
 
-    if (!album) throw new NotFoundException('Track not found');
+    if (!album) throw new NotFoundException('Album not found');
 
     return album;
   }
 
   @HttpCode(HttpStatus.OK)
   @Put(':id')
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
-  ) {
-    const album = this.albumService.update(id, updateAlbumDto);
-
-    return album;
+  ): Promise<AlbumEntity> {
+    return await this.albumService.update(id, updateAlbumDto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const album = this.albumService.remove(id);
-
-    return album;
+  async remove(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
+    await this.albumService.remove(id);
   }
 }
