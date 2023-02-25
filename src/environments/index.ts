@@ -8,7 +8,7 @@ dotenv.config({
 // application
 const PORT: number = +process.env.PORT || 4000;
 
-const CRYPT_SALT = process.env.CRYPT_SALT || 10;
+const CRYPT_SALT = +process.env.CRYPT_SALT || 10;
 
 // JWT
 const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY || 'secret123123';
