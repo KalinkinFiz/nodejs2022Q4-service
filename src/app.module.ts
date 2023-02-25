@@ -9,6 +9,7 @@ import { AlbumModule } from './modules/albums/albums.module';
 import { ArtistModule } from './modules/artists/artists.module';
 import { TrackModule } from './modules/tracks/tracks.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
+import { AuthModule } from './auth/auth.module';
 
 import { AppDataSource } from './config.orm';
 
@@ -20,6 +21,7 @@ import { AppDataSource } from './config.orm';
     ArtistModule,
     TrackModule,
     FavoritesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
