@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone -b postgres-docker https://github.com/KalinkinFiz/nodejs2022Q4-service.git
+git clone -b logging-auth https://github.com/KalinkinFiz/nodejs2022Q4-service.git
 ```
 
 ## Installing NPM modules
@@ -21,21 +21,7 @@ npm install
 
 ---
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-```
-
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
-
-## Or Running via docker
+## Running via docker
 
 Run in terminal:
 
@@ -61,22 +47,23 @@ Rebuild images & start containers:
 - PostgreSQL
 - pgAdmin (http://localhost:5050/)
 
+After starting the app on port (4000 as default) you can open
+in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Or Running the app
+
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+```
 
 ## Testing
 
 After application running open new terminal and enter:
-
-To run all tests without authorization
-
-```
-npm run test
-```
-
-To run only one of all test suites
-
-```
-npm run test -- <path to suite>
-```
 
 To run all test with authorization
 
