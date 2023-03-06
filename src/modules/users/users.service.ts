@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import {
   ForbiddenException,
   Injectable,
@@ -11,6 +12,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 import { UserEntity } from './user.entity';
 
+import { CRYPT_SALT } from '../../environments';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -19,9 +22,11 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const createUser = new UserEntity({
-      ...createUserDto,
-    });
+    const { password } = createUserDto;
+
+    createUserDto.password = await bcrypt.hash(password, CRYPT_SALT);
+
+    const createUser = new UserEntity(createUserDto);
 
     const user = this.userRepository.create(createUser);
 
@@ -40,15 +45,19 @@ export class UserService {
     return user;
   }
 
+  async findByLogin(login: string) {
+    return await this.userRepository.findOne({ where: { login } });
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
 
     const { oldPassword, newPassword } = updateUserDto;
 
-    if (oldPassword !== user.password)
-      throw new ForbiddenException('Incorrect old password');
+    const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordMatch) throw new ForbiddenException('Incorrect password');
 
-    user.password = newPassword;
+    user.password = await bcrypt.hash(newPassword, CRYPT_SALT);
 
     return await this.userRepository.save(user);
   }
